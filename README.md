@@ -16,4 +16,4 @@ This repository show the Context Map of HermesFoods application.
 
 ## Steps to run
 
-In this project we use the context mapper tool to create our context map
+In this project we use the context mapper tool to create our context map, as step by step below:
