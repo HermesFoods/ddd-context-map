@@ -8,11 +8,11 @@ This repository show the Context Map of HermesFoods application.
 
 ## Subtitle
 
-<img src="./img/subtitle.png" width="300x" height="200px">
+<img src="./img/subtitle.png" width="150x" height="100px">
 
 ## Subdomain Classification
 
-<img src="./img/subdomain.png" width="400px" height="200px">
+<img src="./img/subdomain.png" width="200px" height="100px">
 
 ## Steps to run
 
