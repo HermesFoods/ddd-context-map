@@ -1,0 +1,80 @@
+/* Context Map written with 'ContextMapper DSL' */
+ContextMap HermesFoodContextMap {
+	type = SYSTEM_LANDSCAPE
+	state = TO_BE
+	
+	/* Add bounded contexts to this context map: */
+	contains CadastroContext
+	contains MontagemDoPedidoContext
+	contains PagamentoContext
+	contains CozinhaContext
+	contains EntregaFinalContext
+	contains MercadoPagoContext
+	
+	/* Define the context relationships: */ 
+	MontagemDoPedidoContext [U]->[D] CadastroContext {
+		implementationTechnology = "REST"
+	}
+	MontagemDoPedidoContext [D,ACL]<-[U,OHS,PL] PagamentoContext {
+		implementationTechnology = "REST"
+		downstreamRights=INFLUENCER
+	}
+	PagamentoContext [U]->[D] CozinhaContext {
+		implementationTechnology = "REST"
+	}
+	CozinhaContext [U]->[D] EntregaFinalContext {
+		implementationTechnology = "REST"
+	}
+
+	PagamentoContext[D,CF]<-[U]MercadoPagoContext {
+		implementationTechnology = "REST"
+	}
+	PagamentoContext[U]->[D]EntregaFinalContext {
+		implementationTechnology = "REST"
+	}
+}
+
+/* Bounded Context Definitions */
+BoundedContext CadastroContext implements CadastroDomain
+
+BoundedContext PagamentoContext implements PagamentoDomain
+
+BoundedContext MontagemDoPedidoContext implements MontagemDoPedidoDomain
+
+BoundedContext CozinhaContext implements CozinhaDomain
+
+BoundedContext EntregaFinalContext implements EntregaFinalDomain
+
+BoundedContext MercadoPagoContext implements MercadoPagoContext
+
+
+/* Domain & Subdomain Definitions */
+Domain HermesFoodDomain {
+  Subdomain CadastroDomain {
+		type = GENERIC_SUBDOMAIN
+		domainVisionStatement = "Os clientes são apresentados a uma interface de seleção na qual podem optar por se identificarem via CPF, se cadastrarem com nome, e-mail ou não se identificar."
+	}
+  Subdomain MontagemDoPedidoDomain {
+		type = CORE_DOMAIN
+		domainVisionStatement = "Cliente monta o seu pedido na seguinte sequência, sendo todas elas opcionais: 1. Lanche, 2. Acompanhamento, 3. Bebida. Em cada etapa é exibido o nome, descrição e preço de cada produto. 
+								Com a identificação dos clientes o estabelecimento pode trabalhar em campanhas promocionais."
+	}
+  Subdomain PagamentoDomain {
+		type = SUPPORTING_DOMAIN
+		domainVisionStatement = "O sistema deverá possuir uma opção de pagamento integrada para MVP. A forma de pagamento oferecida será via QRCode do Mercado Pago."
+	}
+  Subdomain CozinhaDomain {
+		type = CORE_DOMAIN
+		domainVisionStatement = "Uma vez que o pedido é confirmado e pago, ele é enviado para a cozinha para ser preparado. Simultaneamente deve aparecer em um monitor para o cliente acompanhar o progresso do seu pedido com as seguintes etapas: Recebido, Em preparação, Pronto, Finalizado.
+								Os produtos dispostos para escolha do cliente serão gerenciados pelo estabelecimento, definindo nome, categoria, preço, descrição e imagens. Para esse sistema teremos categorias fixas: Lanche, Acompanhamento, Bebida, Sobremesa.
+								Deve ser possível acompanhar os pedidos em andamento e tempo de espera de cada pedido. As informações dispostas no sistema de pedidos precisarão ser gerenciadas pelo estabelecimento 'Atendente' através de um painel administrativo."
+	}	
+  Subdomain EntregaFinalDomain {
+		type = GENERIC_SUBDOMAIN
+		domainVisionStatement = "Quando o lanche estiver pronto, o sistema deverá notificar o cliente que está pronto para retirada. Ao ser retirado, o pedido deve ser atualizado para o status finalizado."
+	}
+  Subdomain MercadoPagoContext {
+		type = SUPPORTING_DOMAIN
+		domainVisionStatement = "O sistema deverá possuir uma opção de pagamento integrada para MVP. A forma de pagamento oferecida será via QRCode do Mercado Pago."
+	}
+}
